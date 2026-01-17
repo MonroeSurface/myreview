@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MyReview - Review Buku, Film & Lagu</title>
+    <title>MyReview - Review Buku, Film, Lagu & Series</title>
     <style>
         * {
             margin: 0;
@@ -65,32 +65,32 @@
         }
 
         .btn-add {
-            background: #27ae60;
+            background: #1e8449;
             color: white;
         }
 
         .btn-add:hover {
-            background: #229954;
+            background: #186a3b;
             transform: translateY(-2px);
         }
 
         .btn-edit {
-            background: #3498db;
+            background: #1f618d;
             color: white;
         }
 
         .btn-edit:hover {
-            background: #2980b9;
+            background: #1a5276;
             transform: translateY(-2px);
         }
 
         .btn-delete {
-            background: #e74c3c;
+            background: #922b21;
             color: white;
         }
 
         .btn-delete:hover {
-            background: #c0392b;
+            background: #78281f;
             transform: translateY(-2px);
         }
 
@@ -130,15 +130,19 @@
         }
 
         .category-book {
-            background: #f39c12;
+            background: #2c3e50;
         }
 
         .category-film {
-            background: #9b59b6;
+            background: #2c3e50;
         }
 
         .category-song {
-            background: #1abc9c;
+            background: #2c3e50;
+        }
+
+        .category-series {
+            background: #2c3e50;
         }
 
         .category-content {
@@ -360,7 +364,7 @@
     <div class="container">
         <header>
             <h1>MyReview</h1>
-            <p>Bagikan review terbaik Anda tentang Buku, Film, dan Lagu</p>
+            <p>Bagikan review terbaik Anda tentang Buku, Film, Lagu, dan Series</p>
             <div class="header-controls">
                 <button class="btn btn-add" onclick="openAddModal()">+ Tambah Review</button>
                 <button class="btn btn-edit" onclick="alert('Pilih review yang ingin diedit')">Edit Review</button>
@@ -503,13 +507,58 @@
                     </div>
                 </div>
             </div>
+
+            <!-- SERIES -->
+            <div class="category">
+                <div class="category-header category-series">REVIEW SERIES</div>
+                <div class="category-content" id="seriesReviews">
+                    <div class="review-item">
+                        <div class="review-title">Stranger Things</div>
+                        <div class="review-author">oleh Duffer Brothers</div>
+                        <div class="review-rating">Rating: 5/5</div>
+                        <div class="review-text">
+                            Series yang luar biasa dengan cerita yang mysterious dan karakter yang memorable. Kombinasi sempurna antara horror, drama, dan nostalgia 80an.
+                        </div>
+                        <div class="review-actions">
+                            <button class="btn btn-edit btn-small" onclick="editReview(this)">Edit</button>
+                            <button class="btn btn-delete btn-small" onclick="deleteReview(this)">Hapus</button>
+                        </div>
+                    </div>
+
+                    <div class="review-item">
+                        <div class="review-title">Breaking Bad</div>
+                        <div class="review-author">oleh Vince Gilligan</div>
+                        <div class="review-rating">Rating: 5/5</div>
+                        <div class="review-text">
+                            Masterpiece sejati! Transformasi karakter yang luar biasa, plot yang tightly written, dan ending yang sempurna.
+                        </div>
+                        <div class="review-actions">
+                            <button class="btn btn-edit btn-small" onclick="editReview(this)">Edit</button>
+                            <button class="btn btn-delete btn-small" onclick="deleteReview(this)">Hapus</button>
+                        </div>
+                    </div>
+
+                    <div class="review-item">
+                        <div class="review-title">The Office</div>
+                        <div class="review-author">oleh Greg Daniels</div>
+                        <div class="review-rating">Rating: 5/5</div>
+                        <div class="review-text">
+                            Mockumentary comedy yang hilarious dengan karakter yang endearing. Setiap episode membuat saya tertawa sambil merasakan emosi karakter-karakternya.
+                        </div>
+                        <div class="review-actions">
+                            <button class="btn btn-edit btn-small" onclick="editReview(this)">Edit</button>
+                            <button class="btn btn-delete btn-small" onclick="deleteReview(this)">Hapus</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <footer>
             <div class="footer-title">Statistik Reviews</div>
             <div class="footer-stats">
                 <div class="stat-item">
-                    <div class="stat-number" id="totalReviews">9</div>
+                    <div class="stat-number" id="totalReviews">12</div>
                     <div class="stat-label">Total Review</div>
                 </div>
                 <div class="stat-item">
@@ -523,6 +572,10 @@
                 <div class="stat-item">
                     <div class="stat-number" id="songCount">3</div>
                     <div class="stat-label">Review Lagu</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="seriesCount">3</div>
+                    <div class="stat-label">Review Series</div>
                 </div>
             </div>
             <div class="footer-text">
@@ -543,6 +596,7 @@
                     <option value="book">Buku</option>
                     <option value="film">Film</option>
                     <option value="song">Lagu</option>
+                    <option value="series">Series</option>
                 </select>
             </div>
             <div class="form-group">
@@ -600,7 +654,7 @@
                 return;
             }
 
-            const categoryMap = { 'book': 'bookReviews', 'film': 'filmReviews', 'song': 'songReviews' };
+            const categoryMap = { 'book': 'bookReviews', 'film': 'filmReviews', 'song': 'songReviews', 'series': 'seriesReviews' };
             const container = document.getElementById(categoryMap[category]);
 
             const reviewHTML = `
@@ -650,11 +704,13 @@
             const bookCount = document.getElementById('bookReviews').children.length;
             const filmCount = document.getElementById('filmReviews').children.length;
             const songCount = document.getElementById('songReviews').children.length;
-            const totalCount = bookCount + filmCount + songCount;
+            const seriesCount = document.getElementById('seriesReviews').children.length;
+            const totalCount = bookCount + filmCount + songCount + seriesCount;
 
             document.getElementById('bookCount').textContent = bookCount;
             document.getElementById('filmCount').textContent = filmCount;
             document.getElementById('songCount').textContent = songCount;
+            document.getElementById('seriesCount').textContent = seriesCount;
             document.getElementById('totalReviews').textContent = totalCount;
         }
 
