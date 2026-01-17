@@ -24,27 +24,29 @@
         }
 
         header {
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            padding: 40px 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
             margin-bottom: 40px;
-            animation: fadeIn 0.6s ease-in;
+            color: white;
         }
 
         header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            font-weight: 300;
-            color: #333;
+            font-size: 2.8em;
+            margin-bottom: 12px;
+            font-weight: 700;
+            color: white;
             text-align: center;
+            letter-spacing: -1px;
         }
 
         header p {
-            font-size: 1em;
-            color: #666;
-            margin-bottom: 25px;
+            font-size: 1.05em;
+            color: #ecf0f1;
+            margin-bottom: 30px;
             text-align: center;
+            font-weight: 300;
         }
 
         .header-controls {
@@ -109,24 +111,25 @@
 
         .category {
             background: white;
-            border-radius: 8px;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             animation: slideUp 0.6s ease-out;
         }
 
         .category:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
         }
 
         .category-header {
-            padding: 20px;
+            padding: 18px 25px;
             color: white;
-            font-size: 1.5em;
-            font-weight: bold;
+            font-size: 1.3em;
+            font-weight: 700;
             text-align: center;
+            letter-spacing: 0.5px;
         }
 
         .category-book {
@@ -150,17 +153,47 @@
         }
 
         .review-item {
-            margin-bottom: 25px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-left: 4px solid #333;
-            border-radius: 4px;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
             transition: all 0.3s ease;
+            display: flex;
+            gap: 20px;
+            overflow: hidden;
         }
 
         .review-item:hover {
-            background: #e8eaf6;
-            transform: translateX(5px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+            transform: translateY(-2px);
+        }
+
+        .review-image {
+            flex-shrink: 0;
+            width: 140px;
+            height: 200px;
+            border-radius: 6px;
+            object-fit: cover;
+            background: #f0f0f0;
+            border: 1px solid #e0e0e0;
+        }
+
+        .review-image.placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+            color: #999;
+            font-size: 0.8em;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .review-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         .review-header {
@@ -171,38 +204,42 @@
         }
 
         .review-title {
-            font-size: 1.2em;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 8px;
-            flex: 1;
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 6px;
+            letter-spacing: -0.5px;
         }
 
         .review-author {
-            font-size: 0.95em;
-            color: #666;
-            margin-bottom: 8px;
+            font-size: 0.9em;
+            color: #7f8c8d;
+            margin-bottom: 10px;
             font-style: italic;
         }
 
         .review-rating {
-            color: #333;
+            color: #f39c12;
             font-size: 1em;
-            margin-bottom: 10px;
-            font-weight: 600;
+            margin-bottom: 12px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
         }
 
         .review-text {
             color: #555;
-            line-height: 1.6;
+            line-height: 1.7;
             font-size: 0.95em;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            margin-top: auto;
         }
 
         .review-actions {
             display: flex;
-            gap: 5px;
-            margin-top: 10px;
+            gap: 8px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #ecf0f1;
         }
 
         footer {
@@ -267,12 +304,12 @@
 
         .modal-content {
             background-color: white;
-            margin: 50px auto;
-            padding: 30px;
-            border-radius: 8px;
+            margin: 40px auto;
+            padding: 40px;
+            border-radius: 12px;
             width: 90%;
-            max-width: 500px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            max-width: 550px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
         }
 
         .close {
@@ -354,6 +391,16 @@
                 flex-direction: column;
             }
 
+            .review-item {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .review-image {
+                width: 100%;
+                height: 200px;
+            }
+
             .btn {
                 width: 100%;
             }
@@ -378,41 +425,50 @@
                 <div class="category-header category-book">REVIEW BUKU</div>
                 <div class="category-content" id="bookReviews">
                     <div class="review-item">
-                        <div class="review-title">Laskar Pelangi</div>
-                        <div class="review-author">oleh Andrea Hirata</div>
-                        <div class="review-rating">Rating: 5/5</div>
-                        <div class="review-text">
-                            Cerita yang menyentuh hati tentang perjuangan pendidikan di Belitong. Karakter-karakter yang memorable dan plot yang engaging.
-                        </div>
-                        <div class="review-actions">
-                            <button class="btn btn-edit btn-small" onclick="editReview(this)">Edit</button>
-                            <button class="btn btn-delete btn-small" onclick="deleteReview(this)">Hapus</button>
-                        </div>
-                    </div>
-
-                    <div class="review-item">
-                        <div class="review-title">Negeri 5 Menara</div>
-                        <div class="review-author">oleh Ahmad Fuadi</div>
-                        <div class="review-rating">Rating: 5/5</div>
-                        <div class="review-text">
-                            Inspiratif dan memotivasi. Petualangan para santri yang mencari ilmu di berbagai negara dengan pesan moral yang kuat.
-                        </div>
-                        <div class="review-actions">
-                            <button class="btn btn-edit btn-small" onclick="editReview(this)">Edit</button>
-                            <button class="btn btn-delete btn-small" onclick="deleteReview(this)">Hapus</button>
+                        <div class="review-image placeholder">Foto Cover</div>
+                        <div class="review-content">
+                            <div class="review-title">Laskar Pelangi</div>
+                            <div class="review-author">oleh Andrea Hirata</div>
+                            <div class="review-rating">★ Rating: 5/5</div>
+                            <div class="review-text">
+                                Cerita yang menyentuh hati tentang perjuangan pendidikan di Belitong. Karakter-karakter yang memorable dan plot yang engaging.
+                            </div>
+                            <div class="review-actions">
+                                <button class="btn btn-edit btn-small" onclick="editReview(this)">Edit</button>
+                                <button class="btn btn-delete btn-small" onclick="deleteReview(this)">Hapus</button>
+                            </div>
                         </div>
                     </div>
 
                     <div class="review-item">
-                        <div class="review-title">Ayat-Ayat Cinta</div>
-                        <div class="review-author">oleh Habiburrahman El Shirazy</div>
-                        <div class="review-rating">Rating: 4/5</div>
-                        <div class="review-text">
-                            Menceritakan kisah cinta yang dilandasi dengan nilai-nilai spiritual. Storytelling yang bagus dengan setting internasional.
+                        <div class="review-image placeholder">Foto Cover</div>
+                        <div class="review-content">
+                            <div class="review-title">Negeri 5 Menara</div>
+                            <div class="review-author">oleh Ahmad Fuadi</div>
+                            <div class="review-rating">★ Rating: 5/5</div>
+                            <div class="review-text">
+                                Inspiratif dan memotivasi. Petualangan para santri yang mencari ilmu di berbagai negara dengan pesan moral yang kuat.
+                            </div>
+                            <div class="review-actions">
+                                <button class="btn btn-edit btn-small" onclick="editReview(this)">Edit</button>
+                                <button class="btn btn-delete btn-small" onclick="deleteReview(this)">Hapus</button>
+                            </div>
                         </div>
-                        <div class="review-actions">
-                            <button class="btn btn-edit btn-small" onclick="editReview(this)">Edit</button>
-                            <button class="btn btn-delete btn-small" onclick="deleteReview(this)">Hapus</button>
+                    </div>
+
+                    <div class="review-item">
+                        <div class="review-image placeholder">Foto Cover</div>
+                        <div class="review-content">
+                            <div class="review-title">Ayat-Ayat Cinta</div>
+                            <div class="review-author">oleh Habiburrahman El Shirazy</div>
+                            <div class="review-rating">★ Rating: 4/5</div>
+                            <div class="review-text">
+                                Novel romantis yang indah dengan latar belakang budaya Arab dan nilai-nilai spiritual. Cerita yang menyentuh dan menginspirasi tentang cinta dan iman.
+                            </div>
+                            <div class="review-actions">
+                                <button class="btn btn-edit btn-small" onclick="editReview(this)">Edit</button>
+                                <button class="btn btn-delete btn-small" onclick="deleteReview(this)">Hapus</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -423,41 +479,50 @@
                 <div class="category-header category-film">REVIEW FILM</div>
                 <div class="category-content" id="filmReviews">
                     <div class="review-item">
-                        <div class="review-title">The Shawshank Redemption</div>
-                        <div class="review-author">Direktur: Frank Darabont</div>
-                        <div class="review-rating">Rating: 5/5</div>
-                        <div class="review-text">
-                            Masterpiece yang sempurna. Cerita tentang persahabatan dan harapan yang sungguh menginspirasi dan mengharukan.
-                        </div>
-                        <div class="review-actions">
-                            <button class="btn btn-edit btn-small" onclick="editReview(this)">Edit</button>
-                            <button class="btn btn-delete btn-small" onclick="deleteReview(this)">Hapus</button>
-                        </div>
-                    </div>
-
-                    <div class="review-item">
-                        <div class="review-title">Oppenheimer</div>
-                        <div class="review-author">Direktur: Christopher Nolan</div>
-                        <div class="review-rating">Rating: 5/5</div>
-                        <div class="review-text">
-                            Cinematografi yang memukau dengan storytelling yang kompleks. Penggambaran sejarah yang mendalam dan kontroversial.
-                        </div>
-                        <div class="review-actions">
-                            <button class="btn btn-edit btn-small" onclick="editReview(this)">Edit</button>
-                            <button class="btn btn-delete btn-small" onclick="deleteReview(this)">Hapus</button>
+                        <div class="review-image placeholder">Poster Film</div>
+                        <div class="review-content">
+                            <div class="review-title">The Shawshank Redemption</div>
+                            <div class="review-author">Direktur: Frank Darabont</div>
+                            <div class="review-rating">★ Rating: 5/5</div>
+                            <div class="review-text">
+                                Masterpiece yang sempurna. Cerita tentang persahabatan dan harapan yang sungguh menginspirasi dan mengharukan.
+                            </div>
+                            <div class="review-actions">
+                                <button class="btn btn-edit btn-small" onclick="editReview(this)">Edit</button>
+                                <button class="btn btn-delete btn-small" onclick="deleteReview(this)">Hapus</button>
+                            </div>
                         </div>
                     </div>
 
                     <div class="review-item">
-                        <div class="review-title">Aamir</div>
-                        <div class="review-author">Direktur: Rajkumar Gupta</div>
-                        <div class="review-rating">Rating: 4/5</div>
-                        <div class="review-text">
-                            Thriller yang tegang dan penuh kejutan. Menceritakan drama kemanusiaan dengan akting yang luar biasa.
+                        <div class="review-image placeholder">Poster Film</div>
+                        <div class="review-content">
+                            <div class="review-title">Oppenheimer</div>
+                            <div class="review-author">Direktur: Christopher Nolan</div>
+                            <div class="review-rating">★ Rating: 5/5</div>
+                            <div class="review-text">
+                                Cinematografi yang memukau dengan storytelling yang kompleks. Penggambaran sejarah yang mendalam dan kontroversial.
+                            </div>
+                            <div class="review-actions">
+                                <button class="btn btn-edit btn-small" onclick="editReview(this)">Edit</button>
+                                <button class="btn btn-delete btn-small" onclick="deleteReview(this)">Hapus</button>
+                            </div>
                         </div>
-                        <div class="review-actions">
-                            <button class="btn btn-edit btn-small" onclick="editReview(this)">Edit</button>
-                            <button class="btn btn-delete btn-small" onclick="deleteReview(this)">Hapus</button>
+                    </div>
+
+                    <div class="review-item">
+                        <div class="review-image placeholder">Poster Film</div>
+                        <div class="review-content">
+                            <div class="review-title">Aamir</div>
+                            <div class="review-author">Direktur: Rajkumar Gupta</div>
+<div class="review-rating">★ Rating: 4/5</div>
+                            <div class="review-text">
+                                Thriller yang tegang dan penuh kejutan. Menceritakan drama kemanusiaan dengan akting yang luar biasa.
+                            </div>
+                            <div class="review-actions">
+                                <button class="btn btn-edit btn-small" onclick="editReview(this)">Edit</button>
+                                <button class="btn btn-delete btn-small" onclick="deleteReview(this)">Hapus</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -468,41 +533,50 @@
                 <div class="category-header category-song">REVIEW LAGU</div>
                 <div class="category-content" id="songReviews">
                     <div class="review-item">
-                        <div class="review-title">Memories - Maroon 5</div>
-                        <div class="review-author">oleh Adam Levine</div>
-                        <div class="review-rating">Rating: 5/5</div>
-                        <div class="review-text">
-                            Lagu yang emosional dengan lirik yang menyentuh. Musik yang chill dan melodis, sempurna untuk refleksi diri.
-                        </div>
-                        <div class="review-actions">
-                            <button class="btn btn-edit btn-small" onclick="editReview(this)">Edit</button>
-                            <button class="btn btn-delete btn-small" onclick="deleteReview(this)">Hapus</button>
-                        </div>
-                    </div>
-
-                    <div class="review-item">
-                        <div class="review-title">Teman Tapi Menikah</div>
-                        <div class="review-author">oleh Armada</div>
-                        <div class="review-rating">Rating: 4/5</div>
-                        <div class="review-text">
-                            Lagu Indonesia yang catchy dengan lirik yang relatable. Menggambarkan perasaan cinta yang sudah terbiasa menjadi kebiasaan.
-                        </div>
-                        <div class="review-actions">
-                            <button class="btn btn-edit btn-small" onclick="editReview(this)">Edit</button>
-                            <button class="btn btn-delete btn-small" onclick="deleteReview(this)">Hapus</button>
+                        <div class="review-image placeholder">Album Art</div>
+                        <div class="review-content">
+                            <div class="review-title">Memories - Maroon 5</div>
+                            <div class="review-author">oleh Adam Levine</div>
+                            <div class="review-rating">★ Rating: 5/5</div>
+                            <div class="review-text">
+                                Lagu yang emosional dengan lirik yang menyentuh. Musik yang chill dan melodis, sempurna untuk refleksi diri.
+                            </div>
+                            <div class="review-actions">
+                                <button class="btn btn-edit btn-small" onclick="editReview(this)">Edit</button>
+                                <button class="btn btn-delete btn-small" onclick="deleteReview(this)">Hapus</button>
+                            </div>
                         </div>
                     </div>
 
                     <div class="review-item">
-                        <div class="review-title">Blinding Lights - The Weeknd</div>
-                        <div class="review-author">oleh The Weeknd</div>
-                        <div class="review-rating">Rating: 5/5</div>
-                        <div class="review-text">
-                            Beat yang energik dan produksi yang sempurna. Lagu yang catchy dan membuat ketagihan untuk didengarkan.
+                        <div class="review-image placeholder">Album Art</div>
+                        <div class="review-content">
+                            <div class="review-title">Teman Tapi Menikah</div>
+                            <div class="review-author">oleh Armada</div>
+                            <div class="review-rating">★ Rating: 4/5</div>
+                            <div class="review-text">
+                                Lagu Indonesia yang catchy dengan lirik yang relatable. Menggambarkan perasaan cinta yang sudah terbiasa menjadi kebiasaan.
+                            </div>
+                            <div class="review-actions">
+                                <button class="btn btn-edit btn-small" onclick="editReview(this)">Edit</button>
+                                <button class="btn btn-delete btn-small" onclick="deleteReview(this)">Hapus</button>
+                            </div>
                         </div>
-                        <div class="review-actions">
-                            <button class="btn btn-edit btn-small" onclick="editReview(this)">Edit</button>
-                            <button class="btn btn-delete btn-small" onclick="deleteReview(this)">Hapus</button>
+                    </div>
+
+                    <div class="review-item">
+                        <div class="review-image placeholder">Album Art</div>
+                        <div class="review-content">
+                            <div class="review-title">Blinding Lights - The Weeknd</div>
+                            <div class="review-author">oleh The Weeknd</div>
+                            <div class="review-rating">★ Rating: 5/5</div>
+                            <div class="review-text">
+                                Beat yang energik dan produksi yang sempurna. Lagu yang catchy dan membuat ketagihan untuk didengarkan.
+                            </div>
+                            <div class="review-actions">
+                                <button class="btn btn-edit btn-small" onclick="editReview(this)">Edit</button>
+                                <button class="btn btn-delete btn-small" onclick="deleteReview(this)">Hapus</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -513,41 +587,50 @@
                 <div class="category-header category-series">REVIEW SERIES</div>
                 <div class="category-content" id="seriesReviews">
                     <div class="review-item">
-                        <div class="review-title">Stranger Things</div>
-                        <div class="review-author">oleh Duffer Brothers</div>
-                        <div class="review-rating">Rating: 5/5</div>
-                        <div class="review-text">
-                            Series yang luar biasa dengan cerita yang mysterious dan karakter yang memorable. Kombinasi sempurna antara horror, drama, dan nostalgia 80an.
-                        </div>
-                        <div class="review-actions">
-                            <button class="btn btn-edit btn-small" onclick="editReview(this)">Edit</button>
-                            <button class="btn btn-delete btn-small" onclick="deleteReview(this)">Hapus</button>
-                        </div>
-                    </div>
-
-                    <div class="review-item">
-                        <div class="review-title">Breaking Bad</div>
-                        <div class="review-author">oleh Vince Gilligan</div>
-                        <div class="review-rating">Rating: 5/5</div>
-                        <div class="review-text">
-                            Masterpiece sejati! Transformasi karakter yang luar biasa, plot yang tightly written, dan ending yang sempurna.
-                        </div>
-                        <div class="review-actions">
-                            <button class="btn btn-edit btn-small" onclick="editReview(this)">Edit</button>
-                            <button class="btn btn-delete btn-small" onclick="deleteReview(this)">Hapus</button>
+                        <div class="review-image placeholder">Poster Series</div>
+                        <div class="review-content">
+                            <div class="review-title">Stranger Things</div>
+                            <div class="review-author">oleh Duffer Brothers</div>
+                            <div class="review-rating">★ Rating: 5/5</div>
+                            <div class="review-text">
+                                Series yang luar biasa dengan cerita yang mysterious dan karakter yang memorable. Kombinasi sempurna antara horror, drama, dan nostalgia 80an.
+                            </div>
+                            <div class="review-actions">
+                                <button class="btn btn-edit btn-small" onclick="editReview(this)">Edit</button>
+                                <button class="btn btn-delete btn-small" onclick="deleteReview(this)">Hapus</button>
+                            </div>
                         </div>
                     </div>
 
                     <div class="review-item">
-                        <div class="review-title">The Office</div>
-                        <div class="review-author">oleh Greg Daniels</div>
-                        <div class="review-rating">Rating: 5/5</div>
-                        <div class="review-text">
-                            Mockumentary comedy yang hilarious dengan karakter yang endearing. Setiap episode membuat saya tertawa sambil merasakan emosi karakter-karakternya.
+                        <div class="review-image placeholder">Poster Series</div>
+                        <div class="review-content">
+                            <div class="review-title">Breaking Bad</div>
+                            <div class="review-author">oleh Vince Gilligan</div>
+                            <div class="review-rating">★ Rating: 5/5</div>
+                            <div class="review-text">
+                                Masterpiece sejati! Transformasi karakter yang luar biasa, plot yang tightly written, dan ending yang sempurna.
+                            </div>
+                            <div class="review-actions">
+                                <button class="btn btn-edit btn-small" onclick="editReview(this)">Edit</button>
+                                <button class="btn btn-delete btn-small" onclick="deleteReview(this)">Hapus</button>
+                            </div>
                         </div>
-                        <div class="review-actions">
-                            <button class="btn btn-edit btn-small" onclick="editReview(this)">Edit</button>
-                            <button class="btn btn-delete btn-small" onclick="deleteReview(this)">Hapus</button>
+                    </div>
+
+                    <div class="review-item">
+                        <div class="review-image placeholder">Poster Series</div>
+                        <div class="review-content">
+                            <div class="review-title">The Office</div>
+                            <div class="review-author">oleh Greg Daniels</div>
+                            <div class="review-rating">★ Rating: 5/5</div>
+                            <div class="review-text">
+                                Mockumentary comedy yang hilarious dengan karakter yang endearing. Setiap episode membuat saya tertawa sambil merasakan emosi karakter-karakternya.
+                            </div>
+                            <div class="review-actions">
+                                <button class="btn btn-edit btn-small" onclick="editReview(this)">Edit</button>
+                                <button class="btn btn-delete btn-small" onclick="deleteReview(this)">Hapus</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -608,6 +691,10 @@
                 <input type="text" id="author" placeholder="Masukkan penulis/artis/direktur">
             </div>
             <div class="form-group">
+                <label>URL Foto Cover (opsional):</label>
+                <input type="text" id="imageUrl" placeholder="Masukkan link foto cover (misal: https://...)">
+            </div>
+            <div class="form-group">
                 <label>Rating (1-5):</label>
                 <select id="rating">
                     <option value="5">5 - Sangat Bagus</option>
@@ -638,6 +725,7 @@
             document.getElementById('category').value = 'book';
             document.getElementById('title').value = '';
             document.getElementById('author').value = '';
+            document.getElementById('imageUrl').value = '';
             document.getElementById('rating').value = '5';
             document.getElementById('reviewText').value = '';
         }
@@ -646,6 +734,7 @@
             const category = document.getElementById('category').value;
             const title = document.getElementById('title').value;
             const author = document.getElementById('author').value;
+            const imageUrl = document.getElementById('imageUrl').value;
             const rating = document.getElementById('rating').value;
             const reviewText = document.getElementById('reviewText').value;
 
@@ -657,15 +746,20 @@
             const categoryMap = { 'book': 'bookReviews', 'film': 'filmReviews', 'song': 'songReviews', 'series': 'seriesReviews' };
             const container = document.getElementById(categoryMap[category]);
 
+            const imageHTML = imageUrl ? `<img src="${imageUrl}" alt="${title}" class="review-image" onerror="this.src=''; this.className='review-image placeholder'; this.textContent='Foto tidak tersedia';">` : `<div class="review-image placeholder">Foto Cover</div>`;
+
             const reviewHTML = `
                 <div class="review-item">
-                    <div class="review-title">${title}</div>
-                    <div class="review-author">oleh ${author}</div>
-                    <div class="review-rating">Rating: ${rating}/5</div>
-                    <div class="review-text">${reviewText}</div>
-                    <div class="review-actions">
-                        <button class="btn btn-edit btn-small" onclick="editReview(this)">Edit</button>
-                        <button class="btn btn-delete btn-small" onclick="deleteReview(this)">Hapus</button>
+                    ${imageHTML}
+                    <div class="review-content">
+                        <div class="review-title">${title}</div>
+                        <div class="review-author">oleh ${author}</div>
+                        <div class="review-rating">★ Rating: ${rating}/5</div>
+                        <div class="review-text">${reviewText}</div>
+                        <div class="review-actions">
+                            <button class="btn btn-edit btn-small" onclick="editReview(this)">Edit</button>
+                            <button class="btn btn-delete btn-small" onclick="deleteReview(this)">Hapus</button>
+                        </div>
                     </div>
                 </div>
             `;
@@ -690,9 +784,12 @@
             const author = item.querySelector('.review-author').textContent.replace('oleh ', '');
             const rating = item.querySelector('.review-rating').textContent.match(/\d/)[0];
             const reviewText = item.querySelector('.review-text').textContent;
+            const imageElement = item.querySelector('.review-image');
+            const imageUrl = imageElement && imageElement.tagName === 'IMG' ? imageElement.src : '';
 
             document.getElementById('title').value = title;
             document.getElementById('author').value = author;
+            document.getElementById('imageUrl').value = imageUrl;
             document.getElementById('rating').value = rating;
             document.getElementById('reviewText').value = reviewText;
 
