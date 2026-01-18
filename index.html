@@ -716,8 +716,70 @@
     </div>
 
     <script>
+        // ===== LocalStorage Management =====
+        const STORAGE_KEY = 'myReviewsData';
+        let currentEditId = null;
+
+        // Fungsi untuk mendapatkan semua reviews dari LocalStorage
+        function getAllReviews() {
+            const data = localStorage.getItem(STORAGE_KEY);
+            return data ? JSON.parse(data) : [];
+        }
+
+        // Fungsi untuk menyimpan reviews ke LocalStorage
+        function saveReviewsToStorage(reviews) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(reviews));
+        }
+
+        // Fungsi untuk membuat ID unik
+        function generateId() {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2);
+        }
+
+        // Fungsi untuk memuat semua reviews dari LocalStorage saat halaman dibuka
+        function loadReviewsFromStorage() {
+            const allReviews = getAllReviews();
+            
+            // Bersihkan semua review yang ada
+            document.getElementById('bookReviews').innerHTML = '';
+            document.getElementById('filmReviews').innerHTML = '';
+            document.getElementById('songReviews').innerHTML = '';
+            document.getElementById('seriesReviews').innerHTML = '';
+
+            // Muat ulang review dari storage
+            allReviews.forEach(review => {
+                const categoryMap = { 'book': 'bookReviews', 'film': 'filmReviews', 'song': 'songReviews', 'series': 'seriesReviews' };
+                const container = document.getElementById(categoryMap[review.category]);
+                
+                const imageHTML = review.imageUrl ? `<img src="${review.imageUrl}" alt="${review.title}" class="review-image" onerror="this.src=''; this.className='review-image placeholder'; this.textContent='Foto tidak tersedia';">` : `<div class="review-image placeholder">Foto Cover</div>`;
+
+                const reviewHTML = `
+                    <div class="review-item" data-review-id="${review.id}">
+                        ${imageHTML}
+                        <div class="review-content">
+                            <div class="review-title">${review.title}</div>
+                            <div class="review-author">oleh ${review.author}</div>
+                            <div class="review-rating">★ Rating: ${review.rating}/5</div>
+                            <div class="review-text">${review.reviewText}</div>
+                            <div class="review-actions">
+                                <button class="btn btn-edit btn-small" onclick="editReview(this)">Edit</button>
+                                <button class="btn btn-delete btn-small" onclick="deleteReview(this)">Hapus</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                container.insertAdjacentHTML('beforeend', reviewHTML);
+            });
+
+            updateStats();
+        }
+
         function openAddModal() {
+            currentEditId = null;
             document.getElementById('addModal').style.display = 'block';
+            document.querySelector('.modal-content h2').textContent = 'Tambah Review Baru';
+            document.querySelector('.btn-add').onclick = function() { saveReview() };
         }
 
         function closeAddModal() {
@@ -728,6 +790,7 @@
             document.getElementById('imageUrl').value = '';
             document.getElementById('rating').value = '5';
             document.getElementById('reviewText').value = '';
+            currentEditId = null;
         }
 
         function saveReview() {
@@ -743,36 +806,53 @@
                 return;
             }
 
-            const categoryMap = { 'book': 'bookReviews', 'film': 'filmReviews', 'song': 'songReviews', 'series': 'seriesReviews' };
-            const container = document.getElementById(categoryMap[category]);
+            const allReviews = getAllReviews();
 
-            const imageHTML = imageUrl ? `<img src="${imageUrl}" alt="${title}" class="review-image" onerror="this.src=''; this.className='review-image placeholder'; this.textContent='Foto tidak tersedia';">` : `<div class="review-image placeholder">Foto Cover</div>`;
+            if (currentEditId) {
+                // Update review yang sudah ada
+                const index = allReviews.findIndex(r => r.id === currentEditId);
+                if (index !== -1) {
+                    allReviews[index] = {
+                        id: currentEditId,
+                        category,
+                        title,
+                        author,
+                        imageUrl,
+                        rating,
+                        reviewText,
+                        updatedAt: new Date().toLocaleString()
+                    };
+                }
+            } else {
+                // Tambah review baru
+                allReviews.push({
+                    id: generateId(),
+                    category,
+                    title,
+                    author,
+                    imageUrl,
+                    rating,
+                    reviewText,
+                    createdAt: new Date().toLocaleString()
+                });
+            }
 
-            const reviewHTML = `
-                <div class="review-item">
-                    ${imageHTML}
-                    <div class="review-content">
-                        <div class="review-title">${title}</div>
-                        <div class="review-author">oleh ${author}</div>
-                        <div class="review-rating">★ Rating: ${rating}/5</div>
-                        <div class="review-text">${reviewText}</div>
-                        <div class="review-actions">
-                            <button class="btn btn-edit btn-small" onclick="editReview(this)">Edit</button>
-                            <button class="btn btn-delete btn-small" onclick="deleteReview(this)">Hapus</button>
-                        </div>
-                    </div>
-                </div>
-            `;
-
-            container.insertAdjacentHTML('beforeend', reviewHTML);
-            updateStats();
+            saveReviewsToStorage(allReviews);
+            loadReviewsFromStorage();
             closeAddModal();
-            alert('Review berhasil ditambahkan!');
+            alert(currentEditId ? 'Review berhasil diperbarui!' : 'Review berhasil ditambahkan!');
         }
 
         function deleteReview(button) {
             if (confirm('Yakin ingin menghapus review ini?')) {
-                button.closest('.review-item').remove();
+                const reviewItem = button.closest('.review-item');
+                const reviewId = reviewItem.getAttribute('data-review-id');
+                
+                let allReviews = getAllReviews();
+                allReviews = allReviews.filter(r => r.id !== reviewId);
+                
+                saveReviewsToStorage(allReviews);
+                reviewItem.remove();
                 updateStats();
                 alert('Review berhasil dihapus!');
             }
@@ -780,21 +860,23 @@
 
         function editReview(button) {
             const item = button.closest('.review-item');
-            const title = item.querySelector('.review-title').textContent;
-            const author = item.querySelector('.review-author').textContent.replace('oleh ', '');
-            const rating = item.querySelector('.review-rating').textContent.match(/\d/)[0];
-            const reviewText = item.querySelector('.review-text').textContent;
-            const imageElement = item.querySelector('.review-image');
-            const imageUrl = imageElement && imageElement.tagName === 'IMG' ? imageElement.src : '';
+            const reviewId = item.getAttribute('data-review-id');
+            
+            const allReviews = getAllReviews();
+            const review = allReviews.find(r => r.id === reviewId);
 
-            document.getElementById('title').value = title;
-            document.getElementById('author').value = author;
-            document.getElementById('imageUrl').value = imageUrl;
-            document.getElementById('rating').value = rating;
-            document.getElementById('reviewText').value = reviewText;
+            if (review) {
+                currentEditId = reviewId;
+                document.getElementById('category').value = review.category;
+                document.getElementById('title').value = review.title;
+                document.getElementById('author').value = review.author;
+                document.getElementById('imageUrl').value = review.imageUrl || '';
+                document.getElementById('rating').value = review.rating;
+                document.getElementById('reviewText').value = review.reviewText;
 
-            deleteReview(button);
-            openAddModal();
+                document.querySelector('.modal-content h2').textContent = 'Edit Review';
+                openAddModal();
+            }
         }
 
         function updateStats() {
@@ -817,61 +899,18 @@
                 modal.style.display = 'none';
             }
         }
+
+        // Load reviews saat halaman pertama kali dibuka
+        window.addEventListener('DOMContentLoaded', function() {
+            loadReviewsFromStorage();
+        });
+
+        // Cek apakah ada data default atau tidak
+        if (getAllReviews().length === 0) {
+            // Jika tidak ada data, pertahankan data default yang ada di HTML
+            console.log('Tidak ada data di LocalStorage, menampilkan data default');
+        }
     </script>
-    <script type="module">
-  // Import Firebase SDK
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-  import { getFirestore, collection, addDoc, serverTimestamp, query, orderBy, onSnapshot } 
-    from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
-
-  // Config dari Firebase Console (punya kamu)
-  const firebaseConfig = {
-    apiKey: "AIzaSyCPkMrWdypuMMQiwGU9oopFi9-cv2JRE8Q",
-    authDomain: "myreview-515a2.firebaseapp.com",
-    projectId: "myreview-515a2",
-    storageBucket: "myreview-515a2.appspot.com",
-    messagingSenderId: "420564654203",
-    appId: "1:420564654203:web:ffe7fc78f3fac08971eade",
-    measurementId: "G-7HNDFYX11F"
-  };
-
-  // Inisialisasi Firebase & Firestore
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-
-  // Referensi koleksi "reviews"
-  const reviewsCol = collection(db, "reviews");
-
-  // Simpan review saat form disubmit
-  const form = document.getElementById("reviewForm");
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const judul = document.getElementById("judul").value;
-    const jenis = document.getElementById("jenis").value;
-    const isi = document.getElementById("isi").value;
-
-    await addDoc(reviewsCol, { judul, jenis, isi, waktu: serverTimestamp() });
-    form.reset();
-  });
-
-  // Tampilkan review real-time
-  const reviewsDiv = document.getElementById("reviews");
-  const q = query(reviewsCol, orderBy("waktu", "desc"));
-  onSnapshot(q, (snapshot) => {
-    reviewsDiv.innerHTML = "";
-    snapshot.forEach((doc) => {
-      const data = doc.data();
-      const waktu = data.waktu?.toDate?.() ? data.waktu.toDate().toLocaleString() : "-";
-      reviewsDiv.innerHTML += `
-        <div class="item">
-          <h3>${data.judul} (${data.jenis})</h3>
-          <p>${data.isi}</p>
-          <small>Disimpan: ${waktu}</small>
-        </div>
-      `;
-    });
-  });
-</script>
 
 </body>
 </html>
