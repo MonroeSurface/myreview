@@ -1,96 +1,873 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Review Monroe</title>
-  <style>
-    body { font-family: system-ui, sans-serif; max-width: 720px; margin: 40px auto; padding: 0 16px; }
-    h1 { margin-bottom: 16px; }
-    form { display: grid; gap: 12px; margin-bottom: 24px; }
-    input, textarea, button { padding: 10px; font-size: 16px; }
-    textarea { min-height: 120px; }
-    button { cursor: pointer; }
-    .item { border: 1px solid #ddd; padding: 12px; border-radius: 8px; margin-bottom: 12px; }
-    .meta { color: #666; font-size: 14px; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyReview - Review Buku, Film, Lagu & Series</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            padding: 40px 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        header h1 {
+            font-size: 2.8em;
+            margin-bottom: 12px;
+            font-weight: 700;
+            color: white;
+            text-align: center;
+            letter-spacing: -1px;
+        }
+
+        header p {
+            font-size: 1.05em;
+            color: #ecf0f1;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: 300;
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.95em;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .btn-add {
+            background: #1e8449;
+            color: white;
+        }
+
+        .btn-add:hover {
+            background: #186a3b;
+            transform: translateY(-2px);
+        }
+
+        .btn-edit {
+            background: #1f618d;
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background: #1a5276;
+            transform: translateY(-2px);
+        }
+
+        .btn-delete {
+            background: #922b21;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background: #78281f;
+            transform: translateY(-2px);
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 0.85em;
+            margin: 5px 3px;
+        }
+
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .category {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        .category:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+
+        .category-header {
+            padding: 18px 25px;
+            color: white;
+            font-size: 1.3em;
+            font-weight: 700;
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
+
+        .category-book {
+            background: #2c3e50;
+        }
+
+        .category-film {
+            background: #2c3e50;
+        }
+
+        .category-song {
+            background: #2c3e50;
+        }
+
+        .category-series {
+            background: #2c3e50;
+        }
+
+        .category-content {
+            padding: 25px;
+        }
+
+        .review-item {
+            margin-bottom: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            display: flex;
+            gap: 20px;
+            overflow: hidden;
+        }
+
+        .review-item:hover {
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+            transform: translateY(-2px);
+        }
+
+        .review-image {
+            flex-shrink: 0;
+            width: 140px;
+            height: 200px;
+            border-radius: 6px;
+            object-fit: cover;
+            background: #f0f0f0;
+            border: 1px solid #e0e0e0;
+        }
+
+        .review-image.placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+            color: #999;
+            font-size: 0.8em;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .review-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 10px;
+        }
+
+        .review-title {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 6px;
+            letter-spacing: -0.5px;
+        }
+
+        .review-author {
+            font-size: 0.9em;
+            color: #7f8c8d;
+            margin-bottom: 10px;
+            font-style: italic;
+        }
+
+        .review-rating {
+            color: #f39c12;
+            font-size: 1em;
+            margin-bottom: 12px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .review-text {
+            color: #555;
+            line-height: 1.7;
+            font-size: 0.95em;
+            margin-bottom: 15px;
+            margin-top: auto;
+        }
+
+        .review-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #ecf0f1;
+        }
+
+        footer {
+            background: white;
+            text-align: center;
+            color: #333;
+            padding: 40px 30px;
+            margin-top: 50px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .footer-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .footer-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+            padding: 20px 0;
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #27ae60;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .footer-text {
+            font-size: 0.95em;
+            color: #666;
+            margin-top: 15px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 40px auto;
+            padding: 40px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 550px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: inherit;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .categories {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .header-controls {
+                flex-direction: column;
+            }
+
+            .review-item {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .review-image {
+                width: 100%;
+                height: 200px;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
-  <h1>Review Buku, Film, Lagu</h1>
+    <div class="container">
+        <header>
+            <h1>MyReview</h1>
+            <p>Bagikan review terbaik Anda tentang Buku, Film, Lagu, dan Series</p>
+            <div class="header-controls">
+                <button class="btn btn-add" onclick="openAddModal()">+ Tambah Review</button>
+                <button class="btn btn-edit" onclick="alert('Pilih review yang ingin diedit')">Edit Review</button>
+                <button class="btn btn-delete" onclick="alert('Pilih review yang ingin dihapus')">Hapus Review</button>
+            </div>
+        </header>
 
-  <!-- Form input review -->
-  <form id="reviewForm">
-    <input type="text" id="judul" placeholder="Judul Review" required />
-    <input type="text" id="jenis" placeholder="Jenis (Buku/Film/Lagu)" required />
-    <textarea id="isi" placeholder="Tulis review..." required></textarea>
-    <button type="submit">Simpan</button>
-  </form>
+        <div class="categories">
+            <!-- BUKU -->
+            <div class="category">
+                <div class="category-header category-book">REVIEW BUKU</div>
+                <div class="category-content" id="bookReviews">
+                    <div class="review-item">
+                        <div class="review-image placeholder">Foto Cover</div>
+                        <div class="review-content">
+                            <div class="review-title">Laskar Pelangi</div>
+                            <div class="review-author">oleh Andrea Hirata</div>
+                            <div class="review-rating">★ Rating: 5/5</div>
+                            <div class="review-text">
+                                Cerita yang menyentuh hati tentang perjuangan pendidikan di Belitong. Karakter-karakter yang memorable dan plot yang engaging.
+                            </div>
+                            <div class="review-actions">
+                                <button class="btn btn-edit btn-small" onclick="editReview(this)">Edit</button>
+                                <button class="btn btn-delete btn-small" onclick="deleteReview(this)">Hapus</button>
+                            </div>
+                        </div>
+                    </div>
 
-  <!-- Tempat menampilkan review -->
-  <div id="reviews"></div>
+                    <div class="review-item">
+                        <div class="review-image placeholder">Foto Cover</div>
+                        <div class="review-content">
+                            <div class="review-title">Negeri 5 Menara</div>
+                            <div class="review-author">oleh Ahmad Fuadi</div>
+                            <div class="review-rating">★ Rating: 5/5</div>
+                            <div class="review-text">
+                                Inspiratif dan memotivasi. Petualangan para santri yang mencari ilmu di berbagai negara dengan pesan moral yang kuat.
+                            </div>
+                            <div class="review-actions">
+                                <button class="btn btn-edit btn-small" onclick="editReview(this)">Edit</button>
+                                <button class="btn btn-delete btn-small" onclick="deleteReview(this)">Hapus</button>
+                            </div>
+                        </div>
+                    </div>
 
-  <!-- Firebase SDK v9 (modular) -->
-  <script type="module">
-    // Import SDK dari CDN
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-    import { getFirestore, collection, addDoc, serverTimestamp, query, orderBy, onSnapshot } 
-      from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+                    <div class="review-item">
+                        <div class="review-image placeholder">Foto Cover</div>
+                        <div class="review-content">
+                            <div class="review-title">Ayat-Ayat Cinta</div>
+                            <div class="review-author">oleh Habiburrahman El Shirazy</div>
+                            <div class="review-rating">★ Rating: 4/5</div>
+                            <div class="review-text">
+                                Novel romantis yang indah dengan latar belakang budaya Arab dan nilai-nilai spiritual. Cerita yang menyentuh dan menginspirasi tentang cinta dan iman.
+                            </div>
+                            <div class="review-actions">
+                                <button class="btn btn-edit btn-small" onclick="editReview(this)">Edit</button>
+                                <button class="btn btn-delete btn-small" onclick="deleteReview(this)">Hapus</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-    // GANTI dengan konfigurasi dari Firebase Console (Project settings → Web app)
-    const firebaseConfig = {
-      apiKey: "AIzaSyCPkMrWdypuMMQiwGU9oopFi9-cv2JRE8Q",
-      authDomain: "myreview-515a2.firebaseapp.com",
-      projectId: "myreview-515a2",
-      storageBucket: "myreview-515a2.appspot.com",
-      messagingSenderId: "420564654203",
-      appId: "1:420564654203:web:ffe7fc78f3fac08971eade",
-      measurementId: "G-7HNDFYX11F"
-    };
+            <!-- FILM -->
+            <div class="category">
+                <div class="category-header category-film">REVIEW FILM</div>
+                <div class="category-content" id="filmReviews">
+                    <div class="review-item">
+                        <div class="review-image placeholder">Poster Film</div>
+                        <div class="review-content">
+                            <div class="review-title">The Shawshank Redemption</div>
+                            <div class="review-author">Direktur: Frank Darabont</div>
+                            <div class="review-rating">★ Rating: 5/5</div>
+                            <div class="review-text">
+                                Masterpiece yang sempurna. Cerita tentang persahabatan dan harapan yang sungguh menginspirasi dan mengharukan.
+                            </div>
+                            <div class="review-actions">
+                                <button class="btn btn-edit btn-small" onclick="editReview(this)">Edit</button>
+                                <button class="btn btn-delete btn-small" onclick="deleteReview(this)">Hapus</button>
+                            </div>
+                        </div>
+                    </div>
 
-    // Inisialisasi Firebase & Firestore
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+                    <div class="review-item">
+                        <div class="review-image placeholder">Poster Film</div>
+                        <div class="review-content">
+                            <div class="review-title">Oppenheimer</div>
+                            <div class="review-author">Direktur: Christopher Nolan</div>
+                            <div class="review-rating">★ Rating: 5/5</div>
+                            <div class="review-text">
+                                Cinematografi yang memukau dengan storytelling yang kompleks. Penggambaran sejarah yang mendalam dan kontroversial.
+                            </div>
+                            <div class="review-actions">
+                                <button class="btn btn-edit btn-small" onclick="editReview(this)">Edit</button>
+                                <button class="btn btn-delete btn-small" onclick="deleteReview(this)">Hapus</button>
+                            </div>
+                        </div>
+                    </div>
 
-    // Referensi koleksi "reviews"
-    const reviewsCol = collection(db, "reviews");
+                    <div class="review-item">
+                        <div class="review-image placeholder">Poster Film</div>
+                        <div class="review-content">
+                            <div class="review-title">Aamir</div>
+                            <div class="review-author">Direktur: Rajkumar Gupta</div>
+<div class="review-rating">★ Rating: 4/5</div>
+                            <div class="review-text">
+                                Thriller yang tegang dan penuh kejutan. Menceritakan drama kemanusiaan dengan akting yang luar biasa.
+                            </div>
+                            <div class="review-actions">
+                                <button class="btn btn-edit btn-small" onclick="editReview(this)">Edit</button>
+                                <button class="btn btn-delete btn-small" onclick="deleteReview(this)">Hapus</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-    // Handle submit form: simpan ke Firestore
-    const form = document.getElementById("reviewForm");
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const judul = document.getElementById("judul").value.trim();
-      const jenis = document.getElementById("jenis").value.trim();
-      const isi = document.getElementById("isi").value.trim();
+            <!-- LAGU -->
+            <div class="category">
+                <div class="category-header category-song">REVIEW LAGU</div>
+                <div class="category-content" id="songReviews">
+                    <div class="review-item">
+                        <div class="review-image placeholder">Album Art</div>
+                        <div class="review-content">
+                            <div class="review-title">Memories - Maroon 5</div>
+                            <div class="review-author">oleh Adam Levine</div>
+                            <div class="review-rating">★ Rating: 5/5</div>
+                            <div class="review-text">
+                                Lagu yang emosional dengan lirik yang menyentuh. Musik yang chill dan melodis, sempurna untuk refleksi diri.
+                            </div>
+                            <div class="review-actions">
+                                <button class="btn btn-edit btn-small" onclick="editReview(this)">Edit</button>
+                                <button class="btn btn-delete btn-small" onclick="deleteReview(this)">Hapus</button>
+                            </div>
+                        </div>
+                    </div>
 
-      if (!judul || !jenis || !isi) return;
+                    <div class="review-item">
+                        <div class="review-image placeholder">Album Art</div>
+                        <div class="review-content">
+                            <div class="review-title">Teman Tapi Menikah</div>
+                            <div class="review-author">oleh Armada</div>
+                            <div class="review-rating">★ Rating: 4/5</div>
+                            <div class="review-text">
+                                Lagu Indonesia yang catchy dengan lirik yang relatable. Menggambarkan perasaan cinta yang sudah terbiasa menjadi kebiasaan.
+                            </div>
+                            <div class="review-actions">
+                                <button class="btn btn-edit btn-small" onclick="editReview(this)">Edit</button>
+                                <button class="btn btn-delete btn-small" onclick="deleteReview(this)">Hapus</button>
+                            </div>
+                        </div>
+                    </div>
 
-      await addDoc(reviewsCol, {
-        judul,
-        jenis,
-        isi,
-        waktu: serverTimestamp()
-      });
+                    <div class="review-item">
+                        <div class="review-image placeholder">Album Art</div>
+                        <div class="review-content">
+                            <div class="review-title">Blinding Lights - The Weeknd</div>
+                            <div class="review-author">oleh The Weeknd</div>
+                            <div class="review-rating">★ Rating: 5/5</div>
+                            <div class="review-text">
+                                Beat yang energik dan produksi yang sempurna. Lagu yang catchy dan membuat ketagihan untuk didengarkan.
+                            </div>
+                            <div class="review-actions">
+                                <button class="btn btn-edit btn-small" onclick="editReview(this)">Edit</button>
+                                <button class="btn btn-delete btn-small" onclick="deleteReview(this)">Hapus</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-      form.reset();
+            <!-- SERIES -->
+            <div class="category">
+                <div class="category-header category-series">REVIEW SERIES</div>
+                <div class="category-content" id="seriesReviews">
+                    <div class="review-item">
+                        <div class="review-image placeholder">Poster Series</div>
+                        <div class="review-content">
+                            <div class="review-title">Stranger Things</div>
+                            <div class="review-author">oleh Duffer Brothers</div>
+                            <div class="review-rating">★ Rating: 5/5</div>
+                            <div class="review-text">
+                                Series yang luar biasa dengan cerita yang mysterious dan karakter yang memorable. Kombinasi sempurna antara horror, drama, dan nostalgia 80an.
+                            </div>
+                            <div class="review-actions">
+                                <button class="btn btn-edit btn-small" onclick="editReview(this)">Edit</button>
+                                <button class="btn btn-delete btn-small" onclick="deleteReview(this)">Hapus</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="review-item">
+                        <div class="review-image placeholder">Poster Series</div>
+                        <div class="review-content">
+                            <div class="review-title">Breaking Bad</div>
+                            <div class="review-author">oleh Vince Gilligan</div>
+                            <div class="review-rating">★ Rating: 5/5</div>
+                            <div class="review-text">
+                                Masterpiece sejati! Transformasi karakter yang luar biasa, plot yang tightly written, dan ending yang sempurna.
+                            </div>
+                            <div class="review-actions">
+                                <button class="btn btn-edit btn-small" onclick="editReview(this)">Edit</button>
+                                <button class="btn btn-delete btn-small" onclick="deleteReview(this)">Hapus</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="review-item">
+                        <div class="review-image placeholder">Poster Series</div>
+                        <div class="review-content">
+                            <div class="review-title">The Office</div>
+                            <div class="review-author">oleh Greg Daniels</div>
+                            <div class="review-rating">★ Rating: 5/5</div>
+                            <div class="review-text">
+                                Mockumentary comedy yang hilarious dengan karakter yang endearing. Setiap episode membuat saya tertawa sambil merasakan emosi karakter-karakternya.
+                            </div>
+                            <div class="review-actions">
+                                <button class="btn btn-edit btn-small" onclick="editReview(this)">Edit</button>
+                                <button class="btn btn-delete btn-small" onclick="deleteReview(this)">Hapus</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <div class="footer-title">Statistik Reviews</div>
+            <div class="footer-stats">
+                <div class="stat-item">
+                    <div class="stat-number" id="totalReviews">12</div>
+                    <div class="stat-label">Total Review</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="bookCount">3</div>
+                    <div class="stat-label">Review Buku</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="filmCount">3</div>
+                    <div class="stat-label">Review Film</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="songCount">3</div>
+                    <div class="stat-label">Review Lagu</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="seriesCount">3</div>
+                    <div class="stat-label">Review Series</div>
+                </div>
+            </div>
+            <div class="footer-text">
+                <p>&copy; 2026 MyReview | Platform untuk berbagi review favorit Anda</p>
+                <p style="margin-top: 10px; font-size: 0.85em; color: #999;">Dibuat dengan passion untuk review sejati</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Modal Add Review -->
+    <div id="addModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAddModal()">&times;</span>
+            <h2 style="margin-bottom: 20px;">Tambah Review Baru</h2>
+            <div class="form-group">
+                <label>Kategori:</label>
+                <select id="category">
+                    <option value="book">Buku</option>
+                    <option value="film">Film</option>
+                    <option value="song">Lagu</option>
+                    <option value="series">Series</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Judul:</label>
+                <input type="text" id="title" placeholder="Masukkan judul">
+            </div>
+            <div class="form-group">
+                <label>Penulis/Artis/Direktur:</label>
+                <input type="text" id="author" placeholder="Masukkan penulis/artis/direktur">
+            </div>
+            <div class="form-group">
+                <label>URL Foto Cover (opsional):</label>
+                <input type="text" id="imageUrl" placeholder="Masukkan link foto cover (misal: https://...)">
+            </div>
+            <div class="form-group">
+                <label>Rating (1-5):</label>
+                <select id="rating">
+                    <option value="5">5 - Sangat Bagus</option>
+                    <option value="4">4 - Bagus</option>
+                    <option value="3">3 - Cukup</option>
+                    <option value="2">2 - Kurang</option>
+                    <option value="1">1 - Buruk</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Review:</label>
+                <textarea id="reviewText" placeholder="Tulis review Anda di sini..."></textarea>
+            </div>
+            <div class="form-actions">
+                <button class="btn btn-delete" onclick="closeAddModal()">Batal</button>
+                <button class="btn btn-add" onclick="saveReview()">Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openAddModal() {
+            document.getElementById('addModal').style.display = 'block';
+        }
+
+        function closeAddModal() {
+            document.getElementById('addModal').style.display = 'none';
+            document.getElementById('category').value = 'book';
+            document.getElementById('title').value = '';
+            document.getElementById('author').value = '';
+            document.getElementById('imageUrl').value = '';
+            document.getElementById('rating').value = '5';
+            document.getElementById('reviewText').value = '';
+        }
+
+        function saveReview() {
+            const category = document.getElementById('category').value;
+            const title = document.getElementById('title').value;
+            const author = document.getElementById('author').value;
+            const imageUrl = document.getElementById('imageUrl').value;
+            const rating = document.getElementById('rating').value;
+            const reviewText = document.getElementById('reviewText').value;
+
+            if (!title || !author || !reviewText) {
+                alert('Mohon isi semua field');
+                return;
+            }
+
+            const categoryMap = { 'book': 'bookReviews', 'film': 'filmReviews', 'song': 'songReviews', 'series': 'seriesReviews' };
+            const container = document.getElementById(categoryMap[category]);
+
+            const imageHTML = imageUrl ? `<img src="${imageUrl}" alt="${title}" class="review-image" onerror="this.src=''; this.className='review-image placeholder'; this.textContent='Foto tidak tersedia';">` : `<div class="review-image placeholder">Foto Cover</div>`;
+
+            const reviewHTML = `
+                <div class="review-item">
+                    ${imageHTML}
+                    <div class="review-content">
+                        <div class="review-title">${title}</div>
+                        <div class="review-author">oleh ${author}</div>
+                        <div class="review-rating">★ Rating: ${rating}/5</div>
+                        <div class="review-text">${reviewText}</div>
+                        <div class="review-actions">
+                            <button class="btn btn-edit btn-small" onclick="editReview(this)">Edit</button>
+                            <button class="btn btn-delete btn-small" onclick="deleteReview(this)">Hapus</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            container.insertAdjacentHTML('beforeend', reviewHTML);
+            updateStats();
+            closeAddModal();
+            alert('Review berhasil ditambahkan!');
+        }
+
+        function deleteReview(button) {
+            if (confirm('Yakin ingin menghapus review ini?')) {
+                button.closest('.review-item').remove();
+                updateStats();
+                alert('Review berhasil dihapus!');
+            }
+        }
+
+        function editReview(button) {
+            const item = button.closest('.review-item');
+            const title = item.querySelector('.review-title').textContent;
+            const author = item.querySelector('.review-author').textContent.replace('oleh ', '');
+            const rating = item.querySelector('.review-rating').textContent.match(/\d/)[0];
+            const reviewText = item.querySelector('.review-text').textContent;
+            const imageElement = item.querySelector('.review-image');
+            const imageUrl = imageElement && imageElement.tagName === 'IMG' ? imageElement.src : '';
+
+            document.getElementById('title').value = title;
+            document.getElementById('author').value = author;
+            document.getElementById('imageUrl').value = imageUrl;
+            document.getElementById('rating').value = rating;
+            document.getElementById('reviewText').value = reviewText;
+
+            deleteReview(button);
+            openAddModal();
+        }
+
+        function updateStats() {
+            const bookCount = document.getElementById('bookReviews').children.length;
+            const filmCount = document.getElementById('filmReviews').children.length;
+            const songCount = document.getElementById('songReviews').children.length;
+            const seriesCount = document.getElementById('seriesReviews').children.length;
+            const totalCount = bookCount + filmCount + songCount + seriesCount;
+
+            document.getElementById('bookCount').textContent = bookCount;
+            document.getElementById('filmCount').textContent = filmCount;
+            document.getElementById('songCount').textContent = songCount;
+            document.getElementById('seriesCount').textContent = seriesCount;
+            document.getElementById('totalReviews').textContent = totalCount;
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('addModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+    <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+  import { getFirestore, collection, addDoc, serverTimestamp, query, orderBy, onSnapshot } 
+    from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+  // Ganti dengan firebaseConfig dari project kamu
+  const firebaseConfig = {
+    apiKey: "API_KEY",
+    authDomain: "PROJECT_ID.firebaseapp.com",
+    projectId: "PROJECT_ID",
+    storageBucket: "PROJECT_ID.appspot.com",
+    messagingSenderId: "SENDER_ID",
+    appId: "APP_ID"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const reviewsCol = collection(db, "reviews");
+
+  // Simpan review
+  const form = document.getElementById("reviewForm");
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const judul = document.getElementById("judul").value;
+    const jenis = document.getElementById("jenis").value;
+    const isi = document.getElementById("isi").value;
+
+    await addDoc(reviewsCol, { judul, jenis, isi, waktu: serverTimestamp() });
+    form.reset();
+  });
+
+  // Tampilkan review real-time
+  const reviewsDiv = document.getElementById("reviews");
+  const q = query(reviewsCol, orderBy("waktu", "desc"));
+  onSnapshot(q, (snapshot) => {
+    reviewsDiv.innerHTML = "";
+    snapshot.forEach((doc) => {
+      const data = doc.data();
+      const waktu = data.waktu?.toDate?.() ? data.waktu.toDate().toLocaleString() : "-";
+      reviewsDiv.innerHTML += `
+        <div class="item">
+          <h3>${data.judul} (${data.jenis})</h3>
+          <p>${data.isi}</p>
+          <small>Disimpan: ${waktu}</small>
+        </div>
+      `;
     });
+  });
+</script>
 
-    // Tampilkan review secara real-time
-    const reviewsDiv = document.getElementById("reviews");
-    const q = query(reviewsCol, orderBy("waktu", "desc"));
-    onSnapshot(q, (snapshot) => {
-      reviewsDiv.innerHTML = "";
-      snapshot.forEach((doc) => {
-        const data = doc.data();
-        const waktu = data.waktu?.toDate?.() ? data.waktu.toDate().toLocaleString() : "-";
-        reviewsDiv.innerHTML += `
-          <div class="item">
-            <h3>${data.judul} <span class="meta">(${data.jenis})</span></h3>
-            <p>${data.isi}</p>
-            <div class="meta">Disimpan: ${waktu}</div>
-          </div>
-        `;
-      });
-    });
-  </script>
 </body>
 </html>
