@@ -819,26 +819,30 @@
         }
     </script>
     <script type="module">
+  // Import Firebase SDK
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
   import { getFirestore, collection, addDoc, serverTimestamp, query, orderBy, onSnapshot } 
-  from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+    from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
-  // Ganti dengan firebaseConfig dari project kamu
+  // Config dari Firebase Console (punya kamu)
   const firebaseConfig = {
-    apiKey: "API_KEY",
-    authDomain: "PROJECT_ID.firebaseapp.com",
-    projectId: "PROJECT_ID",
-    storageBucket: "PROJECT_ID.appspot.com",
-    messagingSenderId: "SENDER_ID",
-    appId: "APP_ID"
+    apiKey: "AIzaSyCPkMrWdypuMMQiwGU9oopFi9-cv2JRE8Q",
+    authDomain: "myreview-515a2.firebaseapp.com",
+    projectId: "myreview-515a2",
+    storageBucket: "myreview-515a2.appspot.com",
+    messagingSenderId: "420564654203",
+    appId: "1:420564654203:web:ffe7fc78f3fac08971eade",
+    measurementId: "G-7HNDFYX11F"
   };
 
+  // Inisialisasi Firebase & Firestore
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
+  // Referensi koleksi "reviews"
   const reviewsCol = collection(db, "reviews");
 
-  // Simpan review
+  // Simpan review saat form disubmit
   const form = document.getElementById("reviewForm");
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
